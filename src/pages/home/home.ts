@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {IonicPage, MenuController, NavController} from 'ionic-angular';
-import {CredenciaisDTO} from "../../models/CredenciaisDTO";
+import {CredenciaisDTO} from "../../models/Credenciais.dto";
 import {AuthService} from "../../services/AuthService";
 
 @IonicPage()
