@@ -3,7 +3,8 @@ import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HTTP_INTERCEPTORS
 import { Observable } from 'rxjs/Rx';
 import {catchError} from "rxjs/operators";
 import {StorageService} from "../services/storage.service";
-import {AlertController} from "ionic-angular"; // IMPORTANTE: IMPORT ATUALIZADO
+import {AlertController} from "ionic-angular";
+import {MensagemDeCampo} from "../models/mensagemdocampo";
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -38,6 +39,10 @@ export class ErrorInterceptor implements HttpInterceptor {
               this.erro403();
               break;
 
+            case 422:
+              this.erro422(errorObj);
+              break;
+
             default:
               this.erroPadrao(errorObj);
               break;
@@ -65,6 +70,20 @@ export class ErrorInterceptor implements HttpInterceptor {
     this.storage.setLocalUser(null);
   }
 
+ erro422(errorObj){
+    let alert = this.alertCtrl.create({
+      title: 'Erro 422: Validação',
+      message: this.listErrors(errorObj.erros),
+      enableBackdropDismiss: false,
+      buttons: [
+        {
+          text: 'ok'
+        }
+      ]
+    });
+   alert.present();
+ }
+
   erroPadrao(erroObj){
     let alert = this.alertCtrl.create({
       title: 'Erro ' + erroObj.status + ': ' + erroObj.err + '.',
@@ -77,6 +96,14 @@ export class ErrorInterceptor implements HttpInterceptor {
       ]
     });
     alert.present();
+  }
+
+  private listErrors(messagens: MensagemDeCampo[]): string{
+    let s : string = '';
+    for(var i = 0; i < messagens.length; i++){
+      s = s + "<p><strong>" + messagens[i].nomeDoCampo + "</strong>: " + messagens[i].mensagem + "</p>";
+    }
+    return s;
   }
 
 }
