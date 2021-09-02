@@ -16,4 +16,9 @@ export class ProdutoService {
     return this.http.get<ProdutoDto[]>(`${API_CONFIG.baseUrl}/produtos/?categorias=${categoria_id}`);
   }
 
+  getImagemPequenaDoBucket(id: string): Observable<any> {
+    let url = `${API_CONFIG.bucketBaseUrl}/prod${id}-small.jpg`;
+    return this.http.get(url,{responseType: "blob"});
+  }
+
 }
