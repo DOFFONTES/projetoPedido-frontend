@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import {ProdutoDto} from "../../models/produto.dto";
+import {ProdutoDTO} from "../../models/produto.dto";
 import {ProdutoService} from "../../services/domain/produto.service";
 import {API_CONFIG} from "../../config/api.config";
 
@@ -11,7 +11,7 @@ import {API_CONFIG} from "../../config/api.config";
 })
 export class ProdutosPage {
 
-  itens: ProdutoDto[];
+  itens: ProdutoDTO[];
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -41,5 +41,9 @@ export class ProdutosPage {
           error => {});
 
     }
+  }
+
+  mostraDetalhes(){
+    this.navCtrl.push("ProdutoDetalhesPage");
   }
 }
