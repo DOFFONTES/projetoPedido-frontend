@@ -21,7 +21,7 @@ export class ProdutosPage {
   ionViewDidLoad() {
 
     let cat = this.navParams.get("categoria_id")
-    this.produtoService.bucaPorCategoria(cat).
+    this.produtoService.findByCategoria(cat).
       subscribe(response=> {
         this.itens = response['content'];
         this.carregaImagem();
@@ -34,16 +34,15 @@ export class ProdutosPage {
   carregaImagem(){
     for(var i = 0; i < this.itens.length; i ++){
       let item = this.itens[i];
-      this.produtoService.getImagemPequenaDoBucket(item.id)
+      this.produtoService.getSmallImageFromBucket(item.id)
         .subscribe(response => {
           item.imagemUrl = `${API_CONFIG.bucketBaseUrl}/prod${item.id}-small.jpg`;
         },
           error => {});
-
     }
   }
 
   mostraDetalhes(produto_id: string){
-    this.navCtrl.push("ProdutoDetalhesPage", {prod: produto_id});
+    this.navCtrl.push("ProdutoDetalhesPage", {produto_id: produto_id});
   }
 }

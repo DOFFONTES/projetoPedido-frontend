@@ -5,7 +5,6 @@ import {CidadeService} from "../../services/domain/cidade.service";
 import {EstadoService} from "../../services/domain/estado.service";
 import {EstadoDTO} from "../../models/estado.dto";
 import {CidadeDTO} from "../../models/cidade.dto";
-import {ClienteDTO} from "../../models/cliente.dto";
 import {ClienteService} from "../../services/domain/cliente.service";
 
 @IonicPage()
