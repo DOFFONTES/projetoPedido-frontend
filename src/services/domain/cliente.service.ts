@@ -11,9 +11,8 @@ export class ClienteService{
   constructor(public http: HttpClient, public storage: StorageService) {
   }
 
-  buscaPorEmail(email: string) : Observable<ClienteDTO> {
-
-    return this.http.get<ClienteDTO>(
+  buscaPorEmail(email: string) {
+    return this.http.get(
       `${API_CONFIG.baseUrl}/clientes/busca/email?value=${email}`);
   }
 
