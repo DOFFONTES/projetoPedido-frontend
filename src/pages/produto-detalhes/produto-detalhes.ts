@@ -40,9 +40,7 @@ export class ProdutoDetalhesPage {
   }
 
   addToCart(produto: ProdutoDTO) {
-    console.log("Ola mundo");
     this.cartService.addProduto(produto);
-
     this.navCtrl.setRoot('CartPage');
   }
 }
