@@ -112,7 +112,3 @@ export const ErrorInterceptorProvider = {
   useClass: ErrorInterceptor,
   multi: true,
 };
-
-//mysql://b4621278f99415:4dcfafbc@us-cdbr-east-04.cleardb.com/heroku_a849325a72e6912?reconnect=true
-
-// mysql --host=us-cdbr-east-04.cleardb.com --user=b4621278f99415 --password=4dcfafbc --reconnect heroku_a849325a72e6912 < pedidos.sql
