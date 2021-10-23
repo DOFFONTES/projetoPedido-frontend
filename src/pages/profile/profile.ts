@@ -5,6 +5,7 @@ import {ClienteDTO} from "../../models/cliente.dto";
 import {ClienteService} from "../../services/domain/cliente.service";
 import {API_CONFIG} from "../../config/api.config";
 import { Camera, CameraOptions } from "@ionic-native/camera";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @IonicPage()
 @Component({
@@ -15,14 +16,17 @@ export class ProfilePage {
 
   cliente: ClienteDTO;
   picture: string;
+  imagemDoPerfil;
   cameraOn: boolean = false;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public storage: StorageService,
               public clienteService: ClienteService,
-              public camera: Camera
+              public camera: Camera,
+              public domSanitizer: DomSanitizer
               ) {
+    this.imagemDoPerfil = 'assets/imgs/avatar-blank.png';
   }
 
   ionViewDidLoad() {
@@ -52,8 +56,24 @@ export class ProfilePage {
     this.clienteService.getImagemDoBucket(this.cliente.id)
       .subscribe(response => {
           this.cliente.imagemUrl = `${API_CONFIG.bucketBaseUrl}/cp${this.cliente.id}.jpg`;
+          this.blobToDataUrl(response).then(dataUrl => {
+            let str = dataUrl as string;
+            this.imagemDoPerfil = this.domSanitizer.bypassSecurityTrustUrl(str);
+          });
         },
-        error => {});
+        error => {
+          this.imagemDoPerfil = 'assets/imgs/avatar-blank.png';
+        });
+  }
+
+  // https://gist.github.com/frumbert/3bf7a68ffa2ba59061bdcfc016add9ee
+  blobToDataUrl(blob) {
+    return new Promise((fulfill, reject) => {
+      let reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = (e) => fulfill(reader.result);
+      reader.readAsDataURL(blob);
+    })
   }
 
   getCameraPicture(){
@@ -68,13 +88,11 @@ export class ProfilePage {
     }
 
     this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64 (DATA_URL):
       this.picture = 'data:image/png;base64,' + imageData;
 
       this.cameraOn = false;
     }, (err) => {
-      // Handle error
+      this.cameraOn = false;
     });
   }
 
@@ -95,6 +113,7 @@ export class ProfilePage {
 
       this.cameraOn = false;
     }, (err) => {
+      this.cameraOn = false;
     });
   }
 
@@ -102,7 +121,7 @@ export class ProfilePage {
     this.clienteService.uploadPicture(this.picture)
       .subscribe(response => {
         this.picture = null;
-        this.loadData();
+        this.getImageSeExiste();
       },
           error => {
           });
